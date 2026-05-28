@@ -8,10 +8,15 @@ import (
 type EventType string
 
 const (
-	EventAgentCreated      EventType = "agent.created"
-	EventCapabilityGranted EventType = "capability.granted"
-	EventCapabilityChecked EventType = "capability.checked"
-	EventTaskTokenIssued   EventType = "agent.task_token.issued"
+	EventAgentCreated             EventType = "agent.created"
+	EventCapabilityGranted        EventType = "capability.granted"
+	EventCapabilityChecked        EventType = "capability.checked"
+	EventTaskTokenIssued          EventType = "agent.task_token.issued"
+	EventWorkspaceCreated         EventType = "workspace.created"
+	EventWorkspaceRepositoryBound EventType = "workspace.repository_bound"
+	EventWorkspaceAgentAssigned   EventType = "workspace.agent_assigned"
+	EventWorkspaceBranchPlanned   EventType = "workspace.branch_planned"
+	EventWorkspaceStatusChanged   EventType = "workspace.status_changed"
 )
 
 type Decision string
