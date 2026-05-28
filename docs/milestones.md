@@ -70,7 +70,43 @@ Success criteria:
 
 - Agents operate inside explicit workspaces instead of directly mutating repositories.
 
-## Milestone 3: Branch And Change Orchestration
+## Milestone 3: Code Intelligence Primitives MVP
+
+Goal: give agents trusted, permission-aware, commit-pinned code context before they generate patches.
+
+Scope:
+
+- Expose code intelligence primitives through MCP, CLI, HTTP/gRPC, and internal Go use cases
+- MVP primitives: `code.grep`, `code.read_file`, `code.symbols`, `code.references`, `code.ownership`
+- Workspace-scoped task token required for agent calls
+- Repo, revision, path, language, and protected-path authorization
+- Commit-pinned or workspace-snapshot-pinned results
+- Structured result contract with file paths, line ranges, content hashes, and source refs
+- `tool_invocations`, `audit_events`, and `context_references` records for every relevant call
+- Go-first symbol and reference extraction
+
+Go focus:
+
+- `internal/domain/codeintel`
+- `internal/application/codeintel`
+- `internal/service/codeintel`
+- `internal/infra/ast`
+- `internal/infra/git`
+- `internal/infra/search`
+- `internal/interfaces/mcp`
+- `internal/interfaces/cli`
+- `internal/interfaces/http`
+- `internal/interfaces/grpc`
+- `cmd/agenthub-mcp`
+- `cmd/agenthub-cli`
+
+Success criteria:
+
+- Agents can retrieve code context through MCP and CLI without bypassing workspace scope.
+- Every code context item used by an agent can be traced through `context_references`.
+- Commit provenance can point back to the exact code facts the agent used.
+
+## Milestone 4: Branch And Change Orchestration
 
 Goal: establish an agent-specific change protocol.
 
@@ -97,7 +133,7 @@ Success criteria:
 
 - Every generated commit links back to prompt hash, context hash, tool logs, tests, and actor chain.
 
-## Milestone 4: Execution Sandbox
+## Milestone 5: Execution Sandbox
 
 Goal: standardize agent runtime.
 
@@ -124,7 +160,7 @@ Success criteria:
 
 - Every command has policy, actor chain, stdout, stderr, exit code, artifacts, and audit events.
 
-## Milestone 5: Human Approval Gates
+## Milestone 6: Human Approval Gates
 
 Goal: make human control explicit and auditable.
 
@@ -150,7 +186,7 @@ Success criteria:
 
 - High-risk actions cannot proceed without a durable approval record.
 
-## Milestone 6: Review For Agents
+## Milestone 7: Review For Agents
 
 Goal: support human review of agents and agent review of agents.
 
@@ -177,7 +213,7 @@ Success criteria:
 
 - Reviewers can assess both patch content and agent evidence.
 
-## Milestone 7: Durable Conversation And Memory
+## Milestone 8: Durable Conversation And Memory
 
 Goal: make task execution resumable and auditable.
 
@@ -203,7 +239,7 @@ Success criteria:
 
 - A stopped or crashed agent can resume from workspace state and logs.
 
-## Milestone 8: Event Bus / Agent Hooks
+## Milestone 9: Event Bus / Agent Hooks
 
 Goal: make agent work event-driven.
 
@@ -231,12 +267,18 @@ Success criteria:
 
 - Agent task queues receive structured events with retry, debounce, and dead-letter handling.
 
-## Milestone 9: Semantic Code Context
+## Milestone 10: Semantic Code Context Expansion
 
-Goal: provide built-in code understanding without replacing source-of-truth systems.
+Goal: expand code understanding beyond the MVP primitives without replacing source-of-truth systems.
 
 Scope:
 
+- Advanced `code.ast_query`
+- Advanced `code.dependencies`
+- Advanced `code.history`
+- Advanced `code.diff_map`
+- Advanced `code.test_discover`
+- Advanced `code.semantic_search`
 - Repo symbol index
 - Dependency graph
 - Ownership map
@@ -244,18 +286,24 @@ Scope:
 - Issue, PR, and code cross references
 - History summary for changed lines
 - Repo, task, and org scoped memory
+- `context_references` for code facts used by agents
 
 Go focus:
 
+- `internal/domain/codeintel`
+- `internal/application/codeintel`
+- `internal/service/codeintel`
+- `internal/infra/ast`
 - `internal/infra/search`
-- `internal/application/checks`
 - `cmd/agenthub-indexer`
 
 Success criteria:
 
 - Semantic context always links back to Git, database records, logs, or artifacts.
+- Advanced semantic results can be consumed through the same code intelligence primitive interfaces.
+- Generated summaries never become independent facts.
 
-## Milestone 10: Agent-Aware Checks
+## Milestone 11: Agent-Aware Checks
 
 Goal: make checks produce structured, agent-readable remediation.
 
@@ -281,7 +329,7 @@ Success criteria:
 
 - Failed checks can become structured tasks assigned back to agents.
 
-## Milestone 11: Native Multi-Agent Collaboration
+## Milestone 12: Native Multi-Agent Collaboration
 
 Goal: coordinate multiple agents in one workspace or change bundle.
 
@@ -307,7 +355,7 @@ Success criteria:
 
 - Multiple agents can collaborate without relying on informal branch or file conventions.
 
-## Milestone 12: Cross-Repo Change Bundle
+## Milestone 13: Cross-Repo Change Bundle
 
 Goal: support coordinated changes across repositories.
 
@@ -339,9 +387,9 @@ Build the first usable version in this order:
 
 1. Agent Identity And Capability Model
 2. Workspace / Task Primitive
-3. Branch Lease And Commit Provenance
-4. Execution Sandbox Command Runner
-5. Human Approval Gates
+3. Code Intelligence Primitives MVP
+4. Branch Lease And Commit Provenance
+5. Execution Sandbox Command Runner
+6. Human Approval Gates
 
-This MVP already makes AgentHub meaningfully different from normal repository hosting: agents work inside controlled workspaces, use scoped capabilities, produce auditable changes, and cross explicit approval gates.
-
+This MVP already makes AgentHub meaningfully different from normal repository hosting: agents work inside controlled workspaces, retrieve trusted code context through audited primitives, use scoped capabilities, produce auditable changes, and cross explicit approval gates.

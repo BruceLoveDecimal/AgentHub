@@ -14,6 +14,7 @@ Traditional Git platforms are centered on repositories, issues, and pull request
 - Human approval gates
 - Execution sandbox and command audit
 - Durable conversation, memory, and artifacts
+- Code intelligence primitives exposed through MCP, CLI, and APIs
 - Agent-aware review and checks
 - Multi-agent collaboration and cross-repo change bundles
 
@@ -29,13 +30,14 @@ The backend should use clear package boundaries:
 - `internal/domain/`: core entities, value objects, policies, and invariants
 - `internal/application/`: use cases and ports
 - `internal/service/`: business services that coordinate domain behavior
-- `internal/infra/`: concrete adapters for Git, database, queues, sandboxes, storage, and external APIs
-- `internal/interfaces/`: HTTP, gRPC, CLI, webhook, and worker handlers
+- `internal/infra/`: concrete adapters for Git, AST parsing, database, queues, sandboxes, storage, and external APIs
+- `internal/interfaces/`: HTTP, gRPC, MCP, CLI, webhook, and worker handlers
 - `internal/utils/`: small shared utilities with strict dependency rules
 
 See:
 
 - [Architecture](docs/architecture.md)
+- [Code Intelligence Primitives](docs/code-intelligence-primitives.md)
 - [Code Organization](docs/code-organization.md)
 - [Database Schema](docs/database-schema.md)
 - [Milestones](docs/milestones.md)

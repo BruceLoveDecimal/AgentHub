@@ -26,6 +26,10 @@ The domain layer must not import infrastructure packages.
 │   │   └── main.go
 │   ├── agenthub-runner/
 │   │   └── main.go
+│   ├── agenthub-mcp/
+│   │   └── main.go
+│   ├── agenthub-cli/
+│   │   └── main.go
 │   └── agenthub-indexer/
 │       └── main.go
 ├── internal/
@@ -34,6 +38,7 @@ The domain layer must not import infrastructure packages.
 │   │   ├── approvals/
 │   │   ├── branches/
 │   │   ├── changes/
+│   │   ├── codeintel/
 │   │   ├── checks/
 │   │   ├── events/
 │   │   ├── reviews/
@@ -46,18 +51,21 @@ The domain layer must not import infrastructure packages.
 │   │   ├── branch/
 │   │   ├── capability/
 │   │   ├── change/
+│   │   ├── codeintel/
 │   │   ├── event/
 │   │   ├── review/
 │   │   ├── sandbox/
 │   │   └── workspace/
 │   ├── service/
 │   │   ├── authorization/
+│   │   ├── codeintel/
 │   │   ├── orchestration/
 │   │   ├── provenance/
 │   │   ├── risk/
 │   │   └── workflow/
 │   ├── infra/
 │   │   ├── db/
+│   │   ├── ast/
 │   │   ├── git/
 │   │   ├── github/
 │   │   ├── queue/
@@ -69,6 +77,7 @@ The domain layer must not import infrastructure packages.
 │   │   ├── http/
 │   │   ├── grpc/
 │   │   ├── cli/
+│   │   ├── mcp/
 │   │   ├── webhook/
 │   │   └── worker/
 │   └── utils/
@@ -130,6 +139,10 @@ Examples:
 - `RequestApproval`
 - `AcquireBranchLease`
 - `RecordToolInvocation`
+- `GrepCode`
+- `ReadFile`
+- `FindSymbols`
+- `FindReferences`
 - `OpenChangeBundlePRs`
 - `AssignReviewThreadToAgent`
 
@@ -151,6 +164,7 @@ Contains reusable business services that coordinate domain behavior.
 Examples:
 
 - Authorization service
+- Code intelligence query service
 - Provenance service
 - Risk classification service
 - Workspace orchestration service
@@ -171,6 +185,7 @@ Examples:
 
 - PostgreSQL repositories
 - Git command adapter
+- AST parser adapter
 - GitHub API adapter
 - Queue adapter
 - Container/devbox runner
@@ -194,6 +209,7 @@ Examples:
 - HTTP handlers
 - gRPC handlers
 - CLI commands
+- MCP tools
 - GitHub webhook handlers
 - Worker event handlers
 
@@ -269,4 +285,3 @@ Critical workflows to test early:
 - Approval gate enforcement
 - Command execution audit
 - Commit provenance recording
-

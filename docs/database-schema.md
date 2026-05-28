@@ -1024,6 +1024,30 @@ Indexes:
 - `(agent_run_id, rank)`
 - `(repo_id, file_path)`
 
+## Code Intelligence Primitive Persistence
+
+Code intelligence primitives should reuse the durable records already defined in this schema.
+
+Persistence mapping:
+
+| Primitive family | Request record | Result/context record | Index/source tables |
+| --- | --- | --- | --- |
+| `code.grep` | `tool_invocations` | `context_references`, optional `artifacts` | Git snapshot, text index |
+| `code.read_file` | `tool_invocations` | `context_references`, optional `artifacts` | Git snapshot |
+| `code.symbols` | `tool_invocations` | `context_references` | `repo_indexes`, `code_symbols` |
+| `code.references` | `tool_invocations` | `context_references` | `repo_indexes`, `code_symbols`, `code_dependencies` |
+| `code.ownership` | `tool_invocations` | `context_references` | `ownership_rules`, `protected_paths` |
+| `code.ast_query` | `tool_invocations` | `context_references`, optional `artifacts` | AST index, `code_symbols` |
+| `code.dependencies` | `tool_invocations` | `context_references` | `code_dependencies` |
+| `code.history` | `tool_invocations` | `context_references` | `line_history_summaries`, `commits`, `pull_requests` |
+| `code.diff_map` | `tool_invocations` | `context_references` | Git diff, `diff_explanations` |
+| `code.test_discover` | `tool_invocations` | `context_references` | `test_runs`, `code_dependencies`, repo test metadata |
+| `code.semantic_search` | `tool_invocations` | `context_references` | `semantic_embeddings`, `memory_entries` |
+
+Every primitive call should also write an `audit_events` row with the actor chain, workspace, capability decision, target repo/revision, and result count.
+
+The MVP does not require a separate `code_intelligence_queries` table. Add one later only if query analytics, replay, or billing need first-class query records beyond `tool_invocations`.
+
 ## Semantic Code Context Tables
 
 ### `repo_indexes`
@@ -1482,4 +1506,3 @@ Artifacts, command output, raw prompts, raw tool inputs, and large logs should l
 - Approval gates should always bind to a `context_hash` and optional `diff_hash`.
 - Audit events should be append-only and optionally hash-chained.
 - Capability checks should emit audit events for both allow and deny decisions.
-

@@ -102,6 +102,27 @@ It can contain:
 
 This is required for cross-repo changes.
 
+### Code Intelligence Primitive
+
+Code intelligence primitives are trusted, auditable operations that let agents inspect code before changing it.
+
+Examples:
+
+- `code.grep`
+- `code.read_file`
+- `code.symbols`
+- `code.references`
+- `code.ownership`
+- `code.ast_query`
+- `code.dependencies`
+- `code.history`
+- `code.diff_map`
+- `code.test_discover`
+
+These primitives should be exposed through MCP, CLI, HTTP/gRPC, and internal Go use cases, but all entrypoints must share the same authorization, workspace scope, provenance, and audit path.
+
+See [Code Intelligence Primitives](code-intelligence-primitives.md) for the detailed design and MVP.
+
 ### Audit Event
 
 Audit events are append-only records for security, recovery, and review.
@@ -169,6 +190,8 @@ It may maintain:
 
 Important rule: summaries are not facts. Every semantic result must link to Git, database records, logs, or artifacts.
 
+The semantic layer should be consumed through code intelligence primitives rather than ad hoc shell commands when an agent is working inside AgentHub. This makes retrieved context durable, permission-aware, and available for commit provenance.
+
 ## Event Bus
 
 AgentHub should have native agent hooks, not only webhooks for external integrations.
@@ -193,6 +216,7 @@ AgentHub should be implemented in Go because the product needs strong backend se
 Recommended service split for the first version:
 
 - API service: HTTP/gRPC API for workspaces, agents, approvals, and reviews
+- MCP service: agent-facing code intelligence and workspace tools
 - Worker service: event handling, background jobs, rebase queue, checks
 - Runner service: sandbox command execution and artifact capture
 - Indexer service: semantic code index and ownership graph
