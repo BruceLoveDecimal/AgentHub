@@ -24,6 +24,10 @@ const (
 	EventCommitProvenanceRecorded EventType = "commit.provenance_recorded"
 	EventRevertPlanGenerated      EventType = "revert_plan.generated"
 	EventCommandExecuted          EventType = "command.executed"
+	EventApprovalRequested        EventType = "approval.requested"
+	EventApprovalApproved         EventType = "approval.approved"
+	EventApprovalDenied           EventType = "approval.denied"
+	EventApprovalEnforced         EventType = "approval.enforced"
 )
 
 type Decision string
