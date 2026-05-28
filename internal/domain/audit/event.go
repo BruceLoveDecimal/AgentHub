@@ -23,6 +23,7 @@ const (
 	EventChangeBundleItemAdded    EventType = "change_bundle.item_added"
 	EventCommitProvenanceRecorded EventType = "commit.provenance_recorded"
 	EventRevertPlanGenerated      EventType = "revert_plan.generated"
+	EventCommandExecuted          EventType = "command.executed"
 )
 
 type Decision string
