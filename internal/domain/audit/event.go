@@ -18,6 +18,11 @@ const (
 	EventWorkspaceBranchPlanned   EventType = "workspace.branch_planned"
 	EventWorkspaceStatusChanged   EventType = "workspace.status_changed"
 	EventCodeIntelQueried         EventType = "codeintel.queried"
+	EventBranchLeaseAcquired      EventType = "branch.lease_acquired"
+	EventChangeBundleCreated      EventType = "change_bundle.created"
+	EventChangeBundleItemAdded    EventType = "change_bundle.item_added"
+	EventCommitProvenanceRecorded EventType = "commit.provenance_recorded"
+	EventRevertPlanGenerated      EventType = "revert_plan.generated"
 )
 
 type Decision string
