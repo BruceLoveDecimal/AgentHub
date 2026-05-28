@@ -17,6 +17,7 @@ const (
 	EventWorkspaceAgentAssigned   EventType = "workspace.agent_assigned"
 	EventWorkspaceBranchPlanned   EventType = "workspace.branch_planned"
 	EventWorkspaceStatusChanged   EventType = "workspace.status_changed"
+	EventCodeIntelQueried         EventType = "codeintel.queried"
 )
 
 type Decision string

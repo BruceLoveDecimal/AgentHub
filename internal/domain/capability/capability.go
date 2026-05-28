@@ -221,10 +221,10 @@ func (g Grant) Matches(principal Principal, name Name, resource Resource, now ti
 	if g.Capability != name {
 		return false
 	}
-	if g.ResourceKind != resource.Kind && g.ResourceKind != ResourceOrg {
+	if !resourceKindCovers(g.ResourceKind, resource.Kind) {
 		return false
 	}
-	if g.ResourceID != "" && g.ResourceID != resource.ID {
+	if g.ResourceID != "" && !resourceIDMatches(g.ResourceKind, resource, g.ResourceID) {
 		return false
 	}
 	if g.RepoID != "" && g.RepoID != resource.RepoID {
@@ -237,6 +237,23 @@ func (g Grant) Matches(principal Principal, name Name, resource Resource, now ti
 		return false
 	}
 	return true
+}
+
+func resourceKindCovers(grantKind, requestedKind ResourceKind) bool {
+	if grantKind == requestedKind || grantKind == ResourceOrg {
+		return true
+	}
+	return grantKind == ResourceRepo && (requestedKind == ResourcePath || requestedKind == ResourceBranch)
+}
+
+func resourceIDMatches(grantKind ResourceKind, resource Resource, grantResourceID string) bool {
+	if grantKind == ResourceRepo && resource.RepoID != "" {
+		return grantResourceID == resource.RepoID
+	}
+	if grantKind == ResourceOrg {
+		return grantResourceID == resource.OrgID
+	}
+	return grantResourceID == resource.ID
 }
 
 func MatchGlob(pattern, value string) bool {
